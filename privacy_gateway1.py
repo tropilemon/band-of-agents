@@ -61,3 +61,4 @@ def build_lookup_table():
     for i in range(len(anonymized_list)):
         lookup[anonymized_list[i]["employee_id"]] = original_list[i]["employee_id"]
         lookup[anonymized_list[i]["name"]] = original_list[i]["name"]
+    return lookup
