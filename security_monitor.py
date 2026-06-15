@@ -6,6 +6,7 @@ Never import this directly into any AI agent"""
 import pandas as pd
 import os
 from datetime import datetime
+
 #Mia's
 if os.path.exists("audit_log.csv"):
     df_login = pd.read_csv("audit_log.csv")
@@ -40,7 +41,7 @@ import json
 
 SECURITY_LOG = "security_events.jsonl"
 
-#successful attempt to access payroll data
+"""#successful attempt to access payroll data
 def log_attempt(username, action, success=False):
 
     event = {
@@ -48,7 +49,8 @@ def log_attempt(username, action, success=False):
         "username": username,
         "action": action,
         "success": success
-    }
+    }"""
+failed_attempts = {}
 
 def record_failure(user):
   #Mia's
