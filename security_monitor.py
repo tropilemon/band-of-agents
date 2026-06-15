@@ -6,7 +6,7 @@ Never import this directly into any AI agent"""
 import pandas as pd
 import os
 from datetime import datetime
-
+#Mia's
 if os.path.exists("audit_log.csv"):
     df_login = pd.read_csv("audit_log.csv")
 else:
@@ -35,10 +35,23 @@ def log_attempt(user, action, allowed):
     new_row = pd.DataFrame([new_attempt])
     df_login = pd.concat([df_login, new_row], ignore_index=True)
     df_login.to_csv("audit_log.csv", index=False)
+#Iris'
+import json
 
-failed_attempts = {}
+SECURITY_LOG = "security_events.jsonl"
+
+#successful attempt to access payroll data
+def log_attempt(username, action, success=False):
+
+    event = {
+        "timestamp": datetime.now().isoformat(),
+        "username": username,
+        "action": action,
+        "success": success
+    }
 
 def record_failure(user):
+  #Mia's
     global df_flagged
     failed_attempts[user] = (
         failed_attempts.get(user, 0) + 1
@@ -73,3 +86,20 @@ def get_failed_attempts(user):
     else:
         return 0
     
+#Iris'
+    with open(SECURITY_LOG, "a") as f:
+        f.write(json.dumps(event) + "\n")
+
+#failed attempt to access payroll data + flagging user for suspicious activity
+def flag_user(username, reason, risk_score):
+
+    event = {
+        "timestamp": datetime.now().isoformat(),
+        "username": username,
+        "reason": reason,
+        "risk_score": risk_score,
+        "status": "FLAGGED"
+    }
+
+    with open(SECURITY_LOG, "a") as f:
+        f.write(json.dumps(event) + "\n")    
