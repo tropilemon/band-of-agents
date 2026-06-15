@@ -44,7 +44,7 @@ def anonymize_one(employee):
         "department": employee["department"],
         "job_title": employee["job_title"],
         "employment_type": employee["employment_type"],
-        "base_salary": anonymize_salary(employee["base_salary"]),
+        "base_salary": employee["base_salary"],
         "start_date": employee["start_date"],
         "health_insurance": employee["health_insurance"],
         "retirement_contribution": employee["retirement_contribution"],
