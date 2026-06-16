@@ -32,14 +32,15 @@ def ag1_get_employee_field(user, id, field):
     else:
         return "Access denied"
 
-def ag1_add_employee(user, name, dpt, job_title, emp_type, base_salary):
+def ag1_add_employee(user, name, dpt, job_title, emp_type, base_salary, region):
     if run_security_check(user, "add_employee") == True:
         details = {
             "name":name,
             "department":dpt,
             "job_title":job_title,
             "employment_type": emp_type,
-            "base_salary":base_salary
+            "base_salary":base_salary,
+            "region": region
         }
         return(add_employee(details))
     else:
@@ -51,6 +52,7 @@ def ag1_add_employee_prompt(user):
         dpt = input("New employee's department: ")
         job_title = input("New employee's job title: ")
         base_salary = int(input("New employee's base salary: "))
+        region = input("New employee's working region: ")
         emp_type_choice = input("Employment type? 1 Full Time, 2 Part Time (type only numbers)")
         if emp_type_choice == "1":
             emp_type = "Full Time"
@@ -59,7 +61,7 @@ def ag1_add_employee_prompt(user):
         else: 
             print("Invalid input")
             return "Invalid"
-        ag1_add_employee(user, name, dpt, job_title, emp_type, base_salary)
+        ag1_add_employee(user, name, dpt, job_title, emp_type, base_salary, region)
     else:
         return "Access denied"
         
