@@ -41,7 +41,8 @@ def add_employee(details):
                             "Yes" if details["employment_type"] == "Full-Time" else "No"),
         "retirement_contribution": details.get("retirement_contribution", "3%"),
         "stock_options": details.get("stock_options", "No"),
-        "hr_role": details.get("hr_role", "employee")
+        "hr_role": details.get("hr_role", "employee"),
+        "region": details["region"]
     }
 
     new_row = pd.DataFrame([new_employee])
