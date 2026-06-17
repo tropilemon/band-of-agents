@@ -182,7 +182,6 @@ def get_deduction_rules(
     region,
     employment_type
 ):
-    """
     Placeholder for OpenAI/Claude/etc.
 
     ONLY SEND:
@@ -194,7 +193,6 @@ def get_deduction_rules(
         salary
         name
         employee_id
-    """
 
     try:
 
