@@ -55,6 +55,11 @@ USERS = {
         "employee_id": "E010",
         "role": "admin",
         "department": "Finance"
+    },
+    "@miachang0316": {
+        "employee_id": "E012", 
+        "role": "admin",
+        "department": "Human Resources"
     }
 }
 
