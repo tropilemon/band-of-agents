@@ -5,9 +5,9 @@ from datetime import datetime
 if os.path.exists("absences.csv"):
     df = pd.read_csv("absences.csv")
 else:
-    df = pd.DataFrame(columns=["employee_id", "date", "absence_type", "hours_missed", "region", "employment_type"])
+    df = pd.DataFrame(columns=["employee_id", "date", "absence_type", "hours_missed", "region", "employment_type", "department"])
 
-def record_absence(employee_id, date, abs_type, hrs_missed, region, emp_type):
+def record_absence(employee_id, date, abs_type, hrs_missed, region, emp_type, dep):
     global df
     new_absence = {
         "employee_id": employee_id,
@@ -15,7 +15,8 @@ def record_absence(employee_id, date, abs_type, hrs_missed, region, emp_type):
         "absence_type": abs_type,
         "hours_missed": hrs_missed,
         "region": region,
-        "employment_type":emp_type
+        "employment_type":emp_type,
+        "department":dep
     }
     new_row = pd.DataFrame([new_absence])
     df = pd.concat([df, new_row], ignore_index=True)

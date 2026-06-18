@@ -4,12 +4,16 @@ from agent2_security import run_security_check
 from agent1_onboarding import ag1_get_employee_field_by_anon
 from hours_loader import get_average_weekly_hours
 from benefit_calculator import calculate_health_benefit, calculate_retirement_match, calculate_stock_options, calculate_years_of_service
-
+from users import USERS
 
 def ag4_calculate_benefits(user, anon_id, month, year):
-    if not run_security_check(user, "view_payroll"):
+    if not run_security_check(user, "view_benefits"):
         return "Access denied"
-
+    
+    role = USERS[user]["role"]
+    if role == "manager" and USERS[user]["department"] != ag1_get_employee_field_by_anon(user, anon_id, "department"):
+        return "Access denied: you don't have access to get benefits for this employee"
+    
     employment_type = ag1_get_employee_field_by_anon(user, anon_id, "employment_type")
     yearly_salary = ag1_get_employee_field_by_anon(user, anon_id, "base_salary")
     salary = yearly_salary/12
@@ -46,10 +50,12 @@ def ag4_get_monthly_benefits_deduction(user, anon_id, month, year):
     (Health insurance + employee's own retirement contribution — 
     company match doesn't come out of employee's paycheck)
     """
-    if not run_security_check(user, "view_payroll"):
+    if not run_security_check(user, "calc_benefits"):
         return "Access denied"
-
+    
     benefits = ag4_calculate_benefits(user, anon_id, month, year)
+    if benefits == "Access denied" or isinstance(benefits, str):
+        return benefits
 
     health_deduction = benefits["health_insurance"].get("monthly_company_cost", 0) if benefits["health_insurance"]["eligible"] else 0
     

@@ -1,19 +1,17 @@
 # agent 1: access control for payroll data
-from data_loader import USERS
+from users import USERS
 
 ROLES = {
     #Mia's
-    "admin": ["view_payroll", "view_reports", "reidentify", "add_employee", "edit_salary", "run_payroll", "delete_employee", "view_audit_log", "view_flagged_users", "mark_absences", "view_self"],
-    "senior_hr": ["view_payroll", "view_reports", "run_payroll", "edit_salary", "mark_absences", "view_department_reports", "view_department"],
-    "manager": ["view_department_reports", "view_department", "mark_absences"],
-    "junior_hr": ["view_absences", "view_self"],
-    "employee": ["view_self"]
+    "admin": ["view_employee", "add_employee", "update_employee", "delete_employee",
+        "record_absence", "view_absence", "delete_absence", "update_absence",
+        "calc_deduction", "calc_benefits", "view_benefits", "run_payroll"],
+    "senior_hr": ["view_employee", "record_absence", "view_absence", "update_absence",
+        "calc_deduction", "calc_benefits", "view_benefits", "run_payroll"],
+    "manager": ["view_employee", "record_absence", "view_absence", "view_benefits"],
+    "junior_hr": ["view_absence", "record_absence"]
 }
 
 
-def authorize(user, action):
-    role = user["role"]
-
-    allowed_actions = ROLES.get(role, [])
-
-    return action in allowed_actions
+def authorize(role, action):
+    return action in ROLES.get(role, [])

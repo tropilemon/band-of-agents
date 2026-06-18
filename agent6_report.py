@@ -68,7 +68,7 @@ def generate_fallback_summary(payroll_data, benefits_data, excessive_flag):
     return summary
 
 def ag6_generate_report(user, anon_id, month, year):
-    if not run_security_check(user, "view_payroll"):
+    if not run_security_check(user, "run_payroll"):
         return "Access denied"
 
     payroll_data = ag5_calculate_pay(user, anon_id, month, year)
@@ -91,5 +91,6 @@ def ag6_generate_report(user, anon_id, month, year):
     }
 
 if __name__ == "__main__":
-    print("=== Testing Agent 6 ===")
+    print("=== Re-testing Agent 6 ===")
     print(ag6_generate_report("anna.smith", "S_91550FEB", 6, 2026))
+    

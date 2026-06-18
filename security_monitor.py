@@ -7,7 +7,6 @@ import pandas as pd
 import os
 from datetime import datetime
 
-#Mia's
 if os.path.exists("audit_log.csv"):
     df_login = pd.read_csv("audit_log.csv")
 else:
@@ -62,7 +61,6 @@ def record_failure(user):
 
 def get_audit_log():
      return df_login.to_dict(orient="records")
-
 
 def unflag_user(user):
     global df_flagged
