@@ -2,37 +2,51 @@ from data_loader import get_all_employees, get_employee, get_field, add_employee
 from agent2_security import run_security_check
 from anonymizer import anonymize_all, anonymize_one, anonymize_name, anonymize_id
 from lookup import build_lookup_table
+from users import USERS
 
 def ag1_get_all_employees(user):
-    if run_security_check(user, "view_payroll") == True:
+    if run_security_check(user, "view_employee") == True:
         real_data = get_all_employees()
+        # if manager, restrict to only their own department
+        role = USERS[user]["role"]
+        if role == "manager":
+            manager_department = USERS[user]["department"]
+            real_data = [emp for emp in real_data if emp["department"] == manager_department]
         anon_data = anonymize_all(real_data)
         return anon_data
     else:
         return "Access denied"
     
+"""Converts anonymized session ID back to real employee ID"""    
 def get_real_id(user, anon_id):
-    """Converts anonymized session ID back to real employee ID"""
-    if run_security_check(user, "get_id"):
-        original_list = get_all_employees()
-        anonymized_list = ag1_get_all_employees(user)
-        lookup = build_lookup_table(anonymized_list, original_list)
+    original_list = get_all_employees()
+    anonymized_list = ag1_get_all_employees(user)
+    lookup = build_lookup_table(anonymized_list, original_list)
 
-        real_id = lookup.get(anon_id)
-        if not real_id:
-            return None
-        return real_id
-    return None
+    real_id = lookup.get(anon_id)
+    if not real_id:
+        return None
+    return real_id
     
 def ag1_get_one_employee(user, id):
-    if run_security_check(user, "view_payroll") == True:
+    if run_security_check(user, "view_employee") == True:
         real_data = get_employee(id)
+        role = USERS[user]["role"]
+        if role == "manager":
+            manager_department = USERS[user]["department"]
+            if real_data["department"] != manager_department:
+                return "Access denied: this employee is not in your department"
         anon_data = anonymize_one(real_data)
         return anon_data
     return "Access denied"
     
 def ag1_get_employee_field(user, id, field):
-    if run_security_check(user, "view_payroll") == True:
+    if run_security_check(user, "view_employee") == True:
+        role = USERS[user]["role"]
+        if role == "manager":
+            manager_department = USERS[user]["department"]
+            if get_employee(id)["department"] != manager_department:
+                return "Access denied: this employee is not in your department"
         if field == "name":
             real_name = get_field(id, "name")
             anon_name = anonymize_name(real_name)
@@ -47,7 +61,7 @@ def ag1_get_employee_field(user, id, field):
         return "Access denied"
     
 def ag1_get_employee_field_by_anon(user, anon_id, field):
-    if run_security_check(user, "action") == True:
+    if run_security_check(user, "view_employee") == True:
         if field == "name" or field == "employee_id":
             return "Invalid action"
         real_id = get_real_id(user, anon_id)
@@ -56,6 +70,7 @@ def ag1_get_employee_field_by_anon(user, anon_id, field):
         return ag1_get_employee_field(user, real_id, field)
     else:
         return "Access denied"
+    
 def ag1_add_employee(user, name, dpt, job_title, emp_type, base_salary, region):
     if run_security_check(user, "add_employee") == True:
         details = {

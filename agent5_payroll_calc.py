@@ -8,7 +8,7 @@ OVERTIME_THRESHOLD_PER_WEEK = 40
 OVERTIME_MULTIPLIER = 1.5
 
 def ag5_calculate_overtime(user, anon_id, month, year):
-    if not run_security_check(user, "view_payroll"):
+    if not run_security_check(user, "run_payroll"):
         return "Access denied"
 
     employment_type = ag1_get_employee_field_by_anon(user, anon_id, "employment_type")
@@ -30,7 +30,7 @@ def ag5_calculate_overtime(user, anon_id, month, year):
     return round(total_overtime_pay, 2)
 
 def ag5_calculate_pay(user, anon_id, month, year):
-    if not run_security_check(user, "view_payroll"):
+    if not run_security_check(user, "run_payroll"):
         return "Access denied"
 
     salary = ag1_get_employee_field_by_anon(user, anon_id, "base_salary")
@@ -64,7 +64,7 @@ def ag5_calculate_pay(user, anon_id, month, year):
     }
 
 def ag5_run_payroll_all(user, anon_id_list, month, year):
-    if not run_security_check(user, "view_payroll"):
+    if not run_security_check(user, "run_payroll"):
         return "Access denied"
 
     results = []
@@ -74,7 +74,8 @@ def ag5_run_payroll_all(user, anon_id_list, month, year):
     return results
 
 if __name__ == "__main__":
-    print("=== Testing Agent 5 ===")
+    print("=== Re-testing full pipeline after today's changes ===")
+    
     print("\n1. Calculate overtime:")
     print(ag5_calculate_overtime("anna.smith", "S_91550FEB", 6, 2026))
     
