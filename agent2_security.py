@@ -8,7 +8,7 @@ from datetime import datetime
 
 # access permissions for each agent roles
 AGENT_PERMISSIONS = {
-   "payroll_agent": {
+   "agent5_payroll": {
        "employee_id",
        "employment_type",
        "base_salary",
@@ -16,7 +16,7 @@ AGENT_PERMISSIONS = {
    },
 
 
-   "benefits_agent": {
+   "agent4_benefits": {
        "employee_id",
        "employment_type",
        "health_insurance",
@@ -25,7 +25,7 @@ AGENT_PERMISSIONS = {
    },
 
 
-   "absence_agent": {
+   "agent3_absence": {
        "employee_id",
        "employment_type",
        "department"
@@ -119,28 +119,21 @@ if __name__ == "__main__":
 """
 # connecting to agent 1: determining access permissions (anonymized or non) for payroll data based on which agent is requesting
 def get_employee_data(agent_name, requested_fields):
-
-
    approved = authorize_request(
        agent_name,
        requested_fields
    )
-
-
    if not approved:
        raise PermissionError(
            f"{agent_name} is not authorized."
        )
 
-
    # HR gets full records
    if agent_name == "hr_admin":
        return original_list
 
-
    # Other agents get anonymized records
    filtered_records = []
-
 
    for employee in anonymized_list:
 
